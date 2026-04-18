@@ -42,20 +42,27 @@ class UserService:
         reset_link = f"{settings.FRONTEND_BASE_URL}/reset-password?uid={uid}&token={token}"
         send_mail(
             subject="Password Reset Request",
-            message=f"Click link: {reset_link}",
+            message="Click link: " + reset_link,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
             fail_silently=True,
         )
 
+
     @staticmethod
     def reset_password(uid, token, new_password):
         try:
-            user_id = force_str(urlsafe_base64_decode(uid))
-            user = User.objects.get(pk=user_id)
+            # Decode UID correctly for UUID primary keys
+            user_id = force_str(urlsafe_base64_decode(uid)).strip()
+
+            import uuid
+            user = User.objects.get(pk=uuid.UUID(user_id))
+
         except Exception:
             raise ValueError("Invalid reset link.")
+
         if not default_token_generator.check_token(user, token):
             raise ValueError("Invalid or expired token.")
+
         user.set_password(new_password)
         user.save()
