@@ -7,9 +7,15 @@ from .models import User
 class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "email", "username", "role", "bio", "profile_picture_url", 
-                  "average_rating", "total_reviews", "verified", "created_at", "updated_at"]
-        read_only_fields = ["id", "average_rating", "total_reviews", "verified", "created_at", "updated_at"]
+        fields = [
+            "id", "email", "username", "role", "bio", "profile_picture_url",
+            "average_rating", "total_reviews", "verified",
+            "created_at", "updated_at"
+        ]
+        read_only_fields = [
+            "id", "average_rating", "total_reviews",
+            "verified", "created_at", "updated_at"
+        ]
 
 class RegisterRequestSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -62,6 +68,15 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 class PasswordResetConfirmRequestSerializer(serializers.Serializer):
     uid = serializers.CharField()
     token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+# ⭐ THE MISSING SERIALIZER (added exactly as needed)
+class ChangePasswordRequestSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
 
     def validate_new_password(self, value):
