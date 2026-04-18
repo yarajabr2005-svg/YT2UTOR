@@ -2,8 +2,16 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
-# ... (Standard Django settings like BASE_DIR, SECRET_KEY, etc. should remain above)
+# 1. BASE DIRECTORY CONFIGURATION
+# Since settings.py is in 'backend/config/', we go up TWO levels to reach 'backend/'
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# 2. SECURITY SETTINGS
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-your-temp-key-here')
+DEBUG = True
+ALLOWED_HOSTS = []
+
+# 3. APPLICATION DEFINITION
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -11,9 +19,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
+    
+    # Your custom apps (Using the apps. prefix for your structure)
     "apps.users",
     "apps.skills",
     "apps.availability",
@@ -21,12 +33,15 @@ INSTALLED_APPS = [
     "apps.reviews",
 ]
 
+# 4. AUTHENTICATION CONFIG
 AUTH_USER_MODEL = "users.User"
 
+# Ensures authenticate() works with your email-based login logic
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+# 5. MIDDLEWARE
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -38,8 +53,54 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+ROOT_URLCONF = "config.urls"
 
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = "config.wsgi.application"
+
+# 6. DATABASE (Defaulting to SQLite for now; update this for PostgreSQL later)
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+# 7. PASSWORD VALIDATION
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+# 8. INTERNATIONALIZATION
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
+USE_I18N = True
+USE_TZ = True
+
+# 9. STATIC AND MEDIA FILES
+STATIC_URL = "static/"
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# 10. REST FRAMEWORK & JWT SETTINGS
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -55,6 +116,11 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+# 11. EMAIL & NOTIFICATION SETTINGS (Slice 1 requirement)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "no-reply@yt2utor.com"
 FRONTEND_BASE_URL = "http://localhost:3000"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
