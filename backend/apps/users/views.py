@@ -9,6 +9,8 @@ from .serializers import (
     PasswordResetRequestSerializer, PasswordResetConfirmRequestSerializer
 )
 from apps.users.services import UserService
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -17,6 +19,7 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response(UserResponseSerializer(user).data, status=status.HTTP_201_CREATED)
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -27,6 +30,7 @@ class LoginView(APIView):
         tokens = UserService.generate_tokens_for_user(user)
         return Response(LoginResponseSerializer({"access": tokens["access"], "refresh": tokens["refresh"], "user": user}).data)
 
+
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -36,6 +40,7 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response(UserResponseSerializer(user).data)
+
 
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
@@ -48,6 +53,7 @@ class ChangePasswordView(APIView):
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -55,6 +61,7 @@ class PasswordResetRequestView(APIView):
         serializer.is_valid(raise_exception=True)
         UserService.request_password_reset(serializer.validated_data["email"])
         return Response({"message": "Reset link sent."})
+
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [AllowAny]
@@ -66,3 +73,16 @@ class PasswordResetConfirmView(APIView):
             return Response({"message": "Password reset success."})
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Logged out successfully."}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception:
+            return Response({"error": "Invalid refresh token."}, status=status.HTTP_400_BAD_REQUEST)

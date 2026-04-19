@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist", # used in logout
     "corsheaders",
     
     # Your custom apps (Using the apps. prefix for your structure)
