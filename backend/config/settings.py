@@ -130,6 +130,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_PAGE_LINE_WIDTH = 999  # Prevents line wrapping in console email backend
 DEFAULT_FROM_EMAIL = "no-reply@yt2utor.com"
-FRONTEND_BASE_URL = "http://localhost:3000"
+FRONTEND_BASE_URL = "http://localhost:5173"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
