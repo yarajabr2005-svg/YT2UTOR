@@ -10,7 +10,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 2. SECURITY SETTINGS
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-your-temp-key-here')
+SECRET_KEY = 'django-insecure-your-temp-key-here'  # Hardcoded since no .env
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -26,10 +26,10 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist", # used in logout
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     
-    # Your custom apps (Using the apps. prefix for your structure)
+    # Your custom apps
     "apps.users",
     "apps.skills",
     "apps.availability",
@@ -39,8 +39,6 @@ INSTALLED_APPS = [
 
 # 4. AUTHENTICATION CONFIG
 AUTH_USER_MODEL = "users.User"
-
-# Ensures authenticate() works with your email-based login logic
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -88,7 +86,6 @@ DATABASES = {
     }
 }
 
-
 # 7. PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -99,7 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 8. INTERNATIONALIZATION
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Damascus"
 USE_I18N = True
 USE_TZ = True
 
@@ -126,9 +123,9 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# 11. EMAIL & NOTIFICATION SETTINGS (Slice 1 requirement)
+# 11. EMAIL & NOTIFICATION SETTINGS
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_PAGE_LINE_WIDTH = 999  # Prevents line wrapping in console email backend
+EMAIL_PAGE_LINE_WIDTH = 999
 DEFAULT_FROM_EMAIL = "no-reply@yt2utor.com"
 FRONTEND_BASE_URL = "http://localhost:5173"
 
