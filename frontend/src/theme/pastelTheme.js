@@ -4,42 +4,98 @@ const pastelTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#f48fb1", // soft pink
+      main: "#ec6f9f",
+      light: "#f8b3ca",
+      dark: "#c74878",
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: "#ce93d8", // soft purple
+      main: "#a978d6",
+      light: "#d9b9ef",
+      dark: "#7b4aaa",
+      contrastText: "#ffffff",
+    },
+    success: {
+      main: "#45a37c",
+    },
+    warning: {
+      main: "#d7993d",
     },
     background: {
-      default: "#fff7fb", // very light pink
+      default: "#fff7fb",
       paper: "#ffffff",
     },
     error: {
-      main: "#e57373",
+      main: "#dc5a67",
     },
     text: {
-      primary: "#333333",
-      secondary: "#6b6b6b",
+      primary: "#231f2d",
+      secondary: "#706878",
     },
   },
   typography: {
-    fontFamily: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    fontFamily: '"Outfit", "Segoe UI", system-ui, sans-serif',
     h4: {
       fontWeight: 700,
-      letterSpacing: "0.03em",
+      letterSpacing: 0,
+    },
+    h5: {
+      fontWeight: 700,
+    },
+    h6: {
+      fontWeight: 700,
     },
     button: {
       textTransform: "none",
-      fontWeight: 600,
+      fontWeight: 700,
     },
   },
   shape: {
-    borderRadius: 14,
+    borderRadius: 8,
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          background:
+            "radial-gradient(circle at 12% 6%, rgba(244, 143, 177, 0.22), transparent 32%), radial-gradient(circle at 88% 10%, rgba(206, 147, 216, 0.2), transparent 30%), #fff7fb",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 999,
+          borderRadius: 8,
+          boxShadow: "none",
+          minHeight: 42,
+          fontWeight: 800,
+        },
+        contained: {
+          boxShadow: "0 14px 30px rgba(236, 111, 159, 0.28)",
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: "none",
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        size: "small",
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        size: "small",
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
         },
       },
     },

@@ -1,9 +1,10 @@
 from typing import List
 
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.core.files.storage import default_storage
 from django.db import IntegrityError, transaction
 from django.db.models import Prefetch, Q
-from django.core.files.storage import default_storage
 from django.utils import timezone
 
 # ⭐️ NEW — needed for availability filtering
@@ -94,6 +95,12 @@ class TutorSkillService:
 
 class QualificationService:
     @staticmethod
+    def _storage_path_from_url(file_url: str) -> str:
+        if file_url.startswith(settings.MEDIA_URL):
+            return file_url[len(settings.MEDIA_URL):]
+        return file_url.lstrip("/")
+
+    @staticmethod
     def upload_qualification(tutor: User, skill_id: int, file) -> Qualification:
         if tutor.role != "tutor":
             raise PermissionError("Only tutors can upload qualifications.")
@@ -124,7 +131,21 @@ class QualificationService:
             qualification = Qualification.objects.get(id=qual_id, tutor=tutor)
         except Qualification.DoesNotExist:
             return None
+
+        was_approved = qualification.status == "approved"
+        storage_path = QualificationService._storage_path_from_url(qualification.file_url)
+
         qualification.delete()
+        if storage_path:
+            default_storage.delete(storage_path)
+
+        if was_approved and not Qualification.objects.filter(
+            tutor=tutor,
+            status="approved",
+        ).exists():
+            tutor.verified = False
+            tutor.save(update_fields=["verified", "updated_at"])
+
         return True
 
     @staticmethod
@@ -153,6 +174,10 @@ class QualificationService:
         qualification.admin = admin_user
         qualification.reviewed_at = timezone.now()
         qualification.save()
+
+        if status == "approved" and not qualification.tutor.verified:
+            qualification.tutor.verified = True
+            qualification.tutor.save(update_fields=["verified", "updated_at"])
 
         return qualification
 

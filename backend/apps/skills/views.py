@@ -216,12 +216,6 @@ class SearchTutorsView(APIView):
             time=time,
         )
 
-        if skill_name and not tutors.exists():
-            return Response(
-                {"message": "No tutors found for this skill."},
-                status=status.HTTP_200_OK,
-            )
-
         return Response(
             SearchResultTutorSerializer(tutors, many=True).data,
             status=status.HTTP_200_OK,

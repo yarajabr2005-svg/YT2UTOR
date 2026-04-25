@@ -8,5 +8,6 @@ urlpatterns = [
     path("api/", include("apps.availability.urls")),
     path("api/", include("apps.bookings.urls")),
     path("api/", include("apps.reviews.urls")),
+    path("api/", include("apps.ai.urls")),
 
 ]

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "apps.bookings",
     "apps.reviews",
     "apps.notifications",
+    "apps.ai",
 
 ]
 

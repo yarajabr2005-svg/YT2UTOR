@@ -5,12 +5,12 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.utils import timezone
 
 from apps.bookings.models import Booking
 from apps.availability.models import Availability
-from apps.skills.models import Skill
+from apps.skills.models import Skill, UserSkill
 
 # Added Import
 from apps.notifications.services import NotificationService
@@ -159,6 +159,13 @@ class BookingService:
         except Skill.DoesNotExist:
             raise BookingNotFoundError("Skill not found.")
 
+        if not UserSkill.objects.filter(
+            user=tutor,
+            skill=skill,
+            skill_type="teaches",
+        ).exists():
+            raise ValueError("Tutor does not teach the requested skill.")
+
         try:
             availability = Availability.objects.select_for_update().get(
                 id=availability_id,
@@ -210,7 +217,10 @@ class BookingService:
         today = timezone.localdate()
 
         if type_ == "upcoming":
-            qs = qs.filter(booking_date__gte=today).exclude(status__in=["cancelled", "rejected"])
+            qs = qs.filter(status="confirmed", booking_date__gte=today)
+
+        elif type_ == "pending":
+            qs = qs.filter(status="pending")
 
         elif type_ == "past":
             now = timezone.localtime()
@@ -224,6 +234,12 @@ class BookingService:
                 end_time__lt=now.time()
             )
 
+        if date_from:
+            qs = qs.filter(booking_date__gte=date_from)
+
+        if date_to:
+            qs = qs.filter(booking_date__lte=date_to)
+
         return qs.order_by("booking_date", "start_time")
 
     @transaction.atomic
@@ -236,9 +252,18 @@ class BookingService:
         if tutor.id != booking.tutor_id:
             raise PermissionError("Only the tutor can confirm this booking.")
 
+        if Booking.objects.filter(
+            availability=booking.availability,
+            status="confirmed",
+        ).exclude(id=booking.id).exists():
+            raise SlotAlreadyBookedError("This slot is already booked.")
+
         state = get_state_for_booking(booking)
         state.confirm(booking, tutor)
-        booking.save()
+        try:
+            booking.save()
+        except IntegrityError as e:
+            raise SlotAlreadyBookedError("This slot is already booked.") from e
 
         # Trigger Notification
         if self.notification_service:

@@ -112,12 +112,6 @@ class BookingView(APIView):
             date_to=date_to,
         )
 
-        if not bookings.exists():
-            return Response(
-                {"message": "No bookings found."},
-                status=status.HTTP_200_OK,
-            )
-
         return Response(
             BookingSummarySerializer(bookings, many=True).data,
             status=status.HTTP_200_OK,
@@ -146,6 +140,11 @@ class BookingConfirmView(APIView):
         except InvalidStateTransitionError as e:
             return Response(
                 {"error": str(e), "code": "INVALID_STATE_TRANSITION"},
+                status=status.HTTP_409_CONFLICT,
+            )
+        except SlotAlreadyBookedError as e:
+            return Response(
+                {"error": str(e), "code": "SLOT_ALREADY_BOOKED"},
                 status=status.HTTP_409_CONFLICT,
             )
         except PermissionError as e:
