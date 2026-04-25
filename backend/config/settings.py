@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "apps.availability",
     "apps.bookings",
     "apps.reviews",
+    "apps.notifications",
+
 ]
 
 # 4. AUTHENTICATION CONFIG

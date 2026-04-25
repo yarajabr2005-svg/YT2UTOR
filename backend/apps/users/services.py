@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
+
+# Added Import
+from apps.notifications.services import NotificationService
 
 User = get_user_model()
 
@@ -40,24 +42,17 @@ class UserService:
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
         reset_link = f"{settings.FRONTEND_BASE_URL}/reset-password?uid={uid}&token={token}"
-        send_mail(
-            subject="Password Reset Request",
-            message="Click link: " + reset_link,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
-            fail_silently=True,
-        )
-
+        
+        # Updated to use NotificationService
+        notifier = NotificationService()
+        notifier.send_password_reset_email(user, reset_link)
 
     @staticmethod
     def reset_password(uid, token, new_password):
         try:
-            # Decode UID correctly for UUID primary keys
             user_id = force_str(urlsafe_base64_decode(uid)).strip()
-
             import uuid
             user = User.objects.get(pk=uuid.UUID(user_id))
-
         except Exception:
             raise ValueError("Invalid reset link.")
 

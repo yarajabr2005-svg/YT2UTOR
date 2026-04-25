@@ -24,16 +24,19 @@ from apps.bookings.services import (
     NoAvailabilityError,
 )
 
+# Added Import
+from apps.notifications.services import NotificationService
+
 User = get_user_model()
 
 
 def get_booking_service() -> BookingService:
-    # Dependency Injection (Design Pattern):
-    # We inject AvailabilityServiceAdapter (and later NotificationService)
     availability_adapter = AvailabilityServiceAdapter()
+    # Injected real NotificationService
+    notification_service = NotificationService()
     return BookingService(
         availability_service=availability_adapter,
-        notification_service=None,  # will be wired in Notifications slice
+        notification_service=notification_service,
     )
 
 
@@ -110,7 +113,6 @@ class BookingView(APIView):
         )
 
         if not bookings.exists():
-            # EF-04 / EF-08 No Bookings to Display
             return Response(
                 {"message": "No bookings found."},
                 status=status.HTTP_200_OK,
