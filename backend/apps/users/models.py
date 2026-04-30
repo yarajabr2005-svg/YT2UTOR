@@ -20,7 +20,11 @@ class User(AbstractUser):
     )
 
     bio = models.TextField(null=True, blank=True)
-    profile_picture_url = models.TextField(null=True, blank=True)
+    profile_picture = models.ImageField(
+        upload_to="avatars/%Y/%m/",
+        null=True,
+        blank=True,
+    )
 
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
     total_reviews = models.IntegerField(null=True, blank=True)

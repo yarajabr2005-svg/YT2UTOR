@@ -1,0 +1,145 @@
+/* Branded toasts + inline notices — uses tokens.css variables only. */
+
+.toast-stack {
+  position: fixed;
+  z-index: 1400;
+  top: calc(var(--shell-topbar, 64px) + var(--s-3));
+  right: var(--s-5);
+  left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  max-width: min(400px, calc(100vw - var(--s-5) * 2));
+  pointer-events: none;
+}
+
+.toast-stack .toast {
+  pointer-events: auto;
+}
+
+.toast {
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-2);
+  padding: var(--s-3) var(--s-4);
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-snug);
+  color: var(--ink);
+  background: var(--paper-2);
+  box-shadow: 0 12px 40px rgba(35, 31, 45, 0.08);
+  animation: toast-in var(--t-med) var(--ease) both;
+}
+
+.toast--leaving {
+  animation: toast-out var(--t-fast) var(--ease) both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+}
+
+/* Confirm: destructive confirm */
+.stamp.confirm-dialog__danger,
+.stamp.confirm-dialog__danger:hover {
+  color: var(--err);
+  border-color: var(--err);
+  background: var(--err-wash);
+}
+.stamp.confirm-dialog__danger:hover {
+  filter: brightness(0.98);
+}
+
+.toast--success {
+  background: var(--ok-wash);
+  border-color: rgba(22, 130, 79, 0.35);
+}
+
+.toast--error {
+  background: var(--err-wash);
+  border-color: rgba(196, 60, 77, 0.4);
+}
+
+.toast--warning {
+  background: var(--warn-wash);
+  border-color: rgba(185, 120, 38, 0.4);
+}
+
+.toast--info {
+  background: var(--lilac-wash);
+  border-color: rgba(123, 74, 170, 0.35);
+}
+
+.toast__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.toast__title {
+  font-family: var(--serif);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  margin: 0 0 4px;
+  line-height: var(--lh-tight);
+  color: var(--ink);
+}
+
+.toast__body {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.toast__dismiss {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--mute);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 2px;
+  font-family: var(--sans);
+  border-radius: var(--r-1);
+}
+.toast__dismiss:hover {
+  color: var(--ink);
+  background: var(--rule-soft);
+}
+
+/* Inline field / form errors (e.g. file validation) */
+.feedback-inline-error {
+  margin-top: var(--s-2);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--err);
+}
+
+.feedback-inline-success {
+  margin-top: var(--s-2);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ok);
+}
+
+@media (max-width: 600px) {
+  .toast-stack {
+    right: var(--s-3);
+    left: var(--s-3);
+    max-width: none;
+  }
+}

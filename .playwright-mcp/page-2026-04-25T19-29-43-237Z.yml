@@ -1,0 +1,24 @@
+- generic [ref=e4]:
+  - heading "Welcome to YT²UTOR" [level=4] [ref=e5]
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic:
+        - text: Email
+        - generic: "*"
+      - generic [ref=e8]:
+        - textbox "Email" [ref=e9]
+        - group:
+          - generic: Email *
+    - generic [ref=e10]:
+      - generic:
+        - text: Password
+        - generic: "*"
+      - generic [ref=e11]:
+        - textbox "Password" [ref=e12]
+        - group:
+          - generic: Password *
+    - button "Log in" [ref=e13] [cursor=pointer]
+    - paragraph [ref=e14]:
+      - text: Don't have an account?
+      - link "Sign up" [ref=e15] [cursor=pointer]:
+        - /url: /register

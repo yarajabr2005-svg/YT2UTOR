@@ -48,6 +48,7 @@ class BookingStatusResponseSerializer(serializers.ModelSerializer):
 class BookingSummarySerializer(serializers.ModelSerializer):
     tutor_email = serializers.EmailField(source="tutor.email", read_only=True)
     student_email = serializers.EmailField(source="student.email", read_only=True)
+    student_username = serializers.CharField(source="student.username", read_only=True)
     skill_name = serializers.CharField(source="skill.name", read_only=True)
 
     class Meta:
@@ -56,10 +57,14 @@ class BookingSummarySerializer(serializers.ModelSerializer):
             "id",
             "tutor_email",
             "student_email",
+            "student_username",
             "skill_name",
             "booking_date",
             "start_time",
             "end_time",
             "status",
+            "request_date",
+            "confirmed_at",
+            "updated_at",
         ]
         read_only_fields = fields

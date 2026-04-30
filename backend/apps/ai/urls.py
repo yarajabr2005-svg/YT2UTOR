@@ -1,7 +1,6 @@
 from django.urls import path
-
-from apps.ai.views import RecommendTutorsView
+from apps.ai.views import AIRecommendView
 
 urlpatterns = [
-    path("ai/recommend/", RecommendTutorsView.as_view(), name="ai-recommend"),
+    path("ai/recommend/", AIRecommendView.as_view(), name="ai-recommend"),
 ]

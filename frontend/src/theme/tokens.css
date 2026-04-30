@@ -1,0 +1,87 @@
+/* ====================================================================
+   YT2UTOR — Editorial design tokens.
+   Single source of truth. All other CSS reads from here.
+   ==================================================================== */
+
+:root {
+  /* Palette — unchanged from prior brand. */
+  --ink: #231f2d;
+  --ink-soft: #3a3445;
+  --mute: #706878;
+  --mute-soft: #9a93a3;
+  --paper: #fff7fb;
+  --paper-2: #ffffff;
+  --paper-warm: #fff0f7;
+
+  --rose: #ec6f9f;
+  --rose-deep: #c74878;
+  --rose-wash: rgba(236, 111, 159, 0.10);
+
+  --lilac: #a978d6;
+  --lilac-deep: #7b4aaa;
+  --lilac-wash: rgba(169, 120, 214, 0.12);
+
+  --ok: #16824f;
+  --ok-wash: rgba(22, 130, 79, 0.10);
+  --warn: #b97826;
+  --warn-wash: rgba(185, 120, 38, 0.10);
+  --err: #c43c4d;
+  --err-wash: rgba(196, 60, 77, 0.10);
+
+  --rule: rgba(35, 31, 45, 0.14);
+  --rule-strong: rgba(35, 31, 45, 0.32);
+  --rule-soft: rgba(35, 31, 45, 0.06);
+
+  /* Typography — reading serif + calm UI sans (avoids overused “editorial AI” pairings). */
+  --serif: "Newsreader", "Iowan Old Style", "Hoefler Text", Georgia, serif;
+  --sans: "DM Sans", "Helvetica Neue", system-ui, sans-serif;
+
+  --fs-eyebrow: 11px;
+  --fs-meta: 12.5px;
+  --fs-body: 15px;
+  --fs-body-lg: 17px;
+  --fs-h3: 22px;
+  --fs-h2: 32px;
+  --fs-h1: 48px;
+  --fs-display: clamp(56px, 7.6vw, 104px);
+  --fs-numeric: clamp(40px, 4.4vw, 72px);
+
+  --lh-tight: 1.02;
+  --lh-snug: 1.18;
+  --lh-body: 1.55;
+
+  --tk-eyebrow: 0.18em;
+  --tk-meta: 0.04em;
+
+  /* Spacing. */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 72px;
+  --s-9: 104px;
+
+  /* Geometry — the editorial direction stays mostly square. */
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 8px;
+
+  /* Motion. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 160ms;
+  --t-med: 260ms;
+  --t-slow: 480ms;
+
+  /* Shell metrics. */
+  --shell-sidebar: 256px;
+  --shell-topbar: 64px;
+  --shell-max: 1280px;
+}
+
+:root {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}

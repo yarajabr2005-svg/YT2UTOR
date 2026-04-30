@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, Stack } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -19,19 +18,26 @@ export default function AppWorkspace() {
   const navigate = useNavigate();
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const userRole = user?.role || "student";
   const routeMode = location.pathname.replace("/", "") || userRole;
   const activeRole = allowedRoutes.has(routeMode) ? routeMode : userRole;
   const visibleRole = userRole === "admin" ? activeRole : userRole;
+  const activeSection = (location.hash || "#dashboard").replace("#", "");
 
+  /** Light reveal on hero/section headers only — avoids animating every list row and form field on hash change. */
   useGSAP(() => {
-    gsap.fromTo(
-      ".motion-card",
-      { y: 14, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.04, duration: 0.45, ease: "power2.out" },
+    const targets = gsap.utils.toArray(
+      ".hero-title, .hero-sub, .eb, .marg-row, .sm, .stat-block",
     );
-  }, [location.pathname, loading]);
+    if (!targets.length) return;
+    gsap.fromTo(
+      targets,
+      { y: 8, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.04, duration: 0.38, ease: "power2.out" },
+    );
+  }, [location.pathname, location.hash, loading, visibleRole]);
 
   useEffect(() => {
     fetchSkills()
@@ -49,19 +55,48 @@ export default function AppWorkspace() {
     }
   }, [activeRole, location.pathname, navigate, userRole]);
 
+  useEffect(() => {
+    if (!loading && location.hash) {
+      requestAnimationFrame(() => {
+        document.querySelector(location.hash)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
+  }, [loading, location.hash, visibleRole]);
+
   return (
-    <WorkspaceShell role={visibleRole} user={user} onLogout={logout}>
+    <WorkspaceShell
+      role={visibleRole}
+      user={user}
+      onLogout={logout}
+      notificationCount={notificationCount}
+    >
       {loading ? (
-        <Box className="loader-panel">
-          <Stack alignItems="center" spacing={2}>
-            <CircularProgress />
-          </Stack>
-        </Box>
+        <div className="loader-panel">Loading workspace…</div>
       ) : (
         <>
-          {visibleRole === "student" && <StudentWorkspace skills={skills} />}
-          {visibleRole === "tutor" && <TutorWorkspace user={user} skills={skills} />}
-          {visibleRole === "admin" && <AdminWorkspace />}
+          {visibleRole === "student" && (
+            <StudentWorkspace
+              skills={skills}
+              activeSection={activeSection}
+              onNotificationCountChange={setNotificationCount}
+            />
+          )}
+          {visibleRole === "tutor" && (
+            <TutorWorkspace
+              skills={skills}
+              activeSection={activeSection}
+              onNotificationCountChange={setNotificationCount}
+            />
+          )}
+          {visibleRole === "admin" && (
+            <AdminWorkspace
+              activeSection={activeSection}
+              onNotificationCountChange={setNotificationCount}
+            />
+          )}
         </>
       )}
     </WorkspaceShell>

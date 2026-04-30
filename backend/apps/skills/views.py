@@ -217,7 +217,7 @@ class SearchTutorsView(APIView):
         )
 
         return Response(
-            SearchResultTutorSerializer(tutors, many=True).data,
+            SearchResultTutorSerializer(tutors, many=True, context={"request": request}).data,
             status=status.HTTP_200_OK,
         )
 
@@ -234,6 +234,6 @@ class TutorPublicProfileView(APIView):
             )
 
         return Response(
-            TutorPublicProfileSerializer(tutor).data,
+            TutorPublicProfileSerializer(tutor, context={"request": request}).data,
             status=status.HTTP_200_OK,
         )

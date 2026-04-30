@@ -3,19 +3,27 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, validators
 from .models import User
+from .picture_url import build_profile_picture_url
+
 
 class UserResponseSerializer(serializers.ModelSerializer):
+    profile_picture_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
             "id", "email", "username", "role", "bio", "profile_picture_url",
             "average_rating", "total_reviews", "verified",
-            "created_at", "updated_at"
+            "created_at", "updated_at",
         ]
         read_only_fields = [
             "id", "average_rating", "total_reviews",
-            "verified", "created_at", "updated_at"
+            "verified", "created_at", "updated_at",
         ]
+
+    def get_profile_picture_url(self, obj):
+        return build_profile_picture_url(obj, self.context.get("request"))
+
 
 class RegisterRequestSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -36,6 +44,7 @@ class RegisterRequestSerializer(serializers.ModelSerializer):
         from apps.users.services import UserService
         return UserService.create_user(validated_data)
 
+
 class LoginRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
@@ -47,23 +56,34 @@ class LoginRequestSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
+
 class LoginResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
     user = UserResponseSerializer()
 
+
 class UpdateProfileRequestSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=150)
+
     class Meta:
         model = User
-        fields = ["username", "bio", "profile_picture_url"]
+        fields = ["username", "bio"]
 
     def validate(self, data):
         if self.instance.role == "tutor" and "bio" in data and not data["bio"]:
             raise serializers.ValidationError({"bio": "Tutors cannot have an empty bio."})
         return data
 
+    def validate_username(self, value):
+        if User.objects.exclude(pk=self.instance.pk).filter(username=value).exists():
+            raise serializers.ValidationError("A user with that username already exists.")
+        return value
+
+
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
 
 class PasswordResetConfirmRequestSerializer(serializers.Serializer):
     uid = serializers.CharField()
@@ -74,7 +94,7 @@ class PasswordResetConfirmRequestSerializer(serializers.Serializer):
         validate_password(value)
         return value
 
-# ⭐ THE MISSING SERIALIZER (added exactly as needed)
+
 class ChangePasswordRequestSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)

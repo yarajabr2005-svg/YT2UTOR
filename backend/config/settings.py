@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
-    
+    "pgvector.django",
+
     # Your custom apps
     "apps.users",
     "apps.skills",
@@ -105,7 +106,10 @@ USE_TZ = True
 
 # 9. STATIC AND MEDIA FILES
 STATIC_URL = "static/"
-MEDIA_URL = "media/"
+# Leading slash so FileField.url is path-absolute (/media/...). A relative
+# "media/..." breaks request.build_absolute_uri (it joins under the current
+# API path) and path-only URLs would load from the Vite origin in the browser.
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # 10. REST FRAMEWORK & JWT SETTINGS

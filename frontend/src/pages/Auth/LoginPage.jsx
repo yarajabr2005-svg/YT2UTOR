@@ -1,70 +1,81 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
 import AuthLayout from "./AuthLayout";
-import TextInput from "../../components/TextInput";
-import PinkButton from "../../components/PinkButton";
-import ErrorMessage from "../../components/ErrorMessage";
 import { useAuth } from "../../context/AuthContext";
+import { useFeedback } from "../../context/FeedbackContext";
+import {
+  EdField,
+  Eyebrow,
+  StampButton,
+} from "../../components/editorial";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { notify } = useFeedback();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setSubmitting(true);
     try {
       await login(email, password);
       navigate("/", { replace: true });
     } catch {
-      // Changed from 'err' to empty to satisfy ESLint
-      setError("Invalid email or password.");
+      notify.error("Invalid email or password.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <AuthLayout title="Welcome to YT²UTOR">
-      <form onSubmit={handleSubmit}>
-        <TextInput
+    <AuthLayout
+      title="Welcome"
+      accent="back"
+      quote="The right tutor is one good search away. Sign in to continue."
+    >
+      <Eyebrow>Sign in</Eyebrow>
+      <h2 className="auth-right-head">Pick up where you left off</h2>
+      <p className="ux-help" style={{ marginTop: 4, marginBottom: 28 }}>We will send you to your student, tutor, or admin workspace after you sign in.</p>
+
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <EdField
           label="Email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
         />
-        <TextInput
+        <EdField
           label="Password"
           type="password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
         />
 
-        <PinkButton type="submit" disabled={submitting}>
-          {submitting ? "Logging in..." : "Log in"}
-        </PinkButton>
+        <div style={{ marginTop: 16 }}>
+          <StampButton variant="primary" type="submit" disabled={submitting}>
+            {submitting ? "Logging in…" : "Log in  ›"}
+          </StampButton>
+        </div>
 
-        <ErrorMessage message={error} />
-
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ mt: 3, color: "text.secondary" }}
+        <p
+          style={{
+            marginTop: 32,
+            fontFamily: "var(--sans)",
+            fontSize: 14,
+            color: "var(--mute)",
+          }}
         >
-          Don&apos;t have an account?{" "}
-          <Link to="/register" style={{ color: "#f48fb1", fontWeight: 600 }}>
-            Sign up
-          </Link>
-        </Typography>
+          New here?{" "}
+          <Link to="/register" className="auth-link">Create an account</Link>
+        </p>
       </form>
     </AuthLayout>
   );

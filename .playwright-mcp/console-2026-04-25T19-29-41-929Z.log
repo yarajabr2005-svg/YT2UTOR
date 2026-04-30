@@ -1,0 +1,128 @@
+[     266ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[    7616ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[    7731ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[    7899ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[    7897ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[    7900ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[    7901ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[    7936ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[    7936ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[    7936ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[   51770ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[   51857ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[   52005ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[   52000ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[   52002ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[   52011ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[   52042ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[   52043ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[   52043ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[   78184ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[   78255ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[   78301ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[   78306ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[   78307ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[   78306ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/qualifications/pending/:0
+[   78322ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/qualifications/pending/:0
+[  109651ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[  109762ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  109863ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  109860ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  109871ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  109878ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  109880ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  109886ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/api/tutors/303/availability/:0
+[  109889ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=pending:0
+[  109890ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/api/tutors/303/:0
+[  109890ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  109893ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  109896ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=pending:0
+[  109899ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/api/tutors/303/availability/:0
+[  109899ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/api/tutors/303/:0
+[  306374ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[  306452ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  306557ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  306557ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  306561ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  306559ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  306562ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  306585ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  306585ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  843806ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[  843966ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  844094ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  844023ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  844109ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  844065ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  844083ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  844090ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  844091ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  885069ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[  885244ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  885550ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  885297ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  885552ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  885311ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  885311ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  885323ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  885330ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  899557ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=8fb3e821:14337
+[  899642ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  899643ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/skills/:0
+[  899709ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  899710ms] AxiosError: Request failed with status code 401
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1665:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=7b73950b:1998:4)
+[  899691ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  899698ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[  899699ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[  899699ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[ 1015632ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_CLOSED @ https://fonts.gstatic.com/s/fraunces/v38/6NUG8FyLNQOQZAnv9ZwNjucMAkn8xNi7emAe9nimTfdtuFo2.woff2:0
+[ 1095384ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[ 1095385ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[ 1095385ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[ 1095385ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[ 1184771ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=upcoming:0
+[ 1184771ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8000/api/bookings/?type=past:0
+[ 1350639ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/src/pages/workspace/WorkspacePrimitives.jsx?t=1777146732561:0
+[ 1350639ms] [ERROR] [vite] Failed to reload /src/pages/workspace/WorkspacePrimitives.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5173/@vite/client:509
+[ 1350643ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/src/components/PinkButton.jsx?t=1777146732562:0
+[ 1350643ms] [ERROR] [vite] Failed to reload /src/components/PinkButton.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5173/@vite/client:509
+[ 1350647ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/src/components/TextInput.jsx?t=1777146732563:0
+[ 1350647ms] [ERROR] [vite] Failed to reload /src/components/TextInput.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5173/@vite/client:509
+[ 1350650ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/src/components/ErrorMessage.jsx?t=1777146732564:0
+[ 1350650ms] [ERROR] [vite] Failed to reload /src/components/ErrorMessage.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5173/@vite/client:509
+[ 1366944ms] [ERROR] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useLayoutEffect [/student, false] [/student, #dashboard, false, student] @ http://127.0.0.1:5173/@vite/client:509

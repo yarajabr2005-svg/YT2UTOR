@@ -1,37 +1,42 @@
 import React from "react";
-import { Box, Paper, Typography } from "@mui/material";
 
-export default function AuthLayout({ title, children }) {
+/**
+ * Editorial split layout for auth pages.
+ *  - Left: serif statement, rose accent, pull-quote, foot meta.
+ *  - Right: form column on hairline-ruled inputs.
+ */
+export default function AuthLayout({
+  eyebrow = "YT²UTOR",
+  title,
+  accent,
+  quote,
+  children,
+}) {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #ffe4f3 0%, #f3e5f5 50%, #fff7fb 100%)",
-        px: 2,
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          maxWidth: 420,
-          width: "100%",
-          p: 4,
-          borderRadius: 4,
-          backdropFilter: "blur(10px)",
-        }}
-      >
-        <Typography
-          variant="h4"
-          align="center"
-          sx={{ mb: 3, color: "primary.main" }}
-        >
-          {title}
-        </Typography>
-        {children}
-      </Paper>
-    </Box>
+    <div className="auth-split">
+      <aside className="auth-left">
+        <div>
+          <span className="eb eb--rose" style={{ display: "block", marginBottom: 32 }}>
+            {eyebrow}
+          </span>
+          <h1 className="auth-left-title">
+            {title}
+            {accent && (
+              <>
+                {" "}
+                <em>{accent}</em>
+              </>
+            )}
+            .
+          </h1>
+          {quote && <p className="auth-left-quote">&ldquo;{quote}&rdquo;</p>}
+        </div>
+        <div className="auth-left-foot">
+          <span>YT2UTOR · 2026</span>
+          <span>Connect with tutors who match your goals.</span>
+        </div>
+      </aside>
+      <section className="auth-right">{children}</section>
+    </div>
   );
 }

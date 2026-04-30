@@ -21,7 +21,11 @@ export async function fetchTutorAvailability(tutorId) {
 }
 
 export async function recommendTutors(payload) {
-  const response = await api.post("ai/recommend/", payload);
+  // Strip empty strings so DRF optional fields accept omitted values
+  const cleaned = Object.fromEntries(
+    Object.entries(payload).filter(([, v]) => v !== "" && v !== undefined)
+  );
+  const response = await api.post("ai/recommend/", cleaned);
   return response.data;
 }
 

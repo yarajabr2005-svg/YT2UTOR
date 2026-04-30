@@ -51,6 +51,14 @@ class TutorSkillService:
                 except IntegrityError:
                     raise DuplicateSkillError(f"Skill '{skill.name}' already added.")
 
+        # ✅ AI hook: rebuild embedding for this tutor (non-blocking)
+        try:
+            from apps.ai.services import AIService
+            AIService.build_tutor_embedding(tutor)
+        except Exception:
+            # If AI fails, we silently ignore to avoid breaking skills slice
+            pass
+
         return created_user_skills
 
     @staticmethod
@@ -87,6 +95,14 @@ class TutorSkillService:
                         skill=skill,
                         skill_type="teaches",
                     )
+
+        # ✅ AI hook: rebuild embedding for this tutor (non-blocking)
+        try:
+            from apps.ai.services import AIService
+            AIService.build_tutor_embedding(tutor)
+        except Exception:
+            # If AI fails, we silently ignore to avoid breaking skills slice
+            pass
 
         return list(
             UserSkill.objects.filter(user=tutor, skill_type="teaches").select_related("skill")

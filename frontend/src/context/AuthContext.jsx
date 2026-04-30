@@ -1,6 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState } from "react";
-import { login as apiLogin, logout as apiLogout } from "../api/auth";
+import {
+  login as apiLogin,
+  logout as apiLogout,
+  updateProfile as apiUpdateProfile,
+  uploadProfileAvatar as apiUploadProfileAvatar,
+  changePassword as apiChangePassword,
+} from "../api/auth";
 
 const AuthContext = createContext(null);
 
@@ -44,8 +50,38 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleUpdateProfile = async (payload) => {
+    const nextUser = await apiUpdateProfile(payload);
+    setUser(nextUser);
+    localStorage.setItem("yt2utor_user", JSON.stringify(nextUser));
+    return nextUser;
+  };
+
+  const handleUploadAvatar = async (file) => {
+    const nextUser = await apiUploadProfileAvatar(file);
+    setUser(nextUser);
+    localStorage.setItem("yt2utor_user", JSON.stringify(nextUser));
+    return nextUser;
+  };
+
+  const handleChangePassword = async (payload) => {
+    return apiChangePassword(payload);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, accessToken, refreshToken, isAuthenticated: !!user, login: handleLogin, logout: handleLogout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        accessToken,
+        refreshToken,
+        isAuthenticated: !!user,
+        login: handleLogin,
+        logout: handleLogout,
+        updateProfile: handleUpdateProfile,
+        uploadAvatar: handleUploadAvatar,
+        changePassword: handleChangePassword,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

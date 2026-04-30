@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from apps.users.picture_url import build_profile_picture_url
 from .models import Skill, UserSkill, Qualification
 
 User = get_user_model()
@@ -98,6 +99,7 @@ class QualificationVerifyRequestSerializer(serializers.Serializer):
 # ⭐️ FIX APPLIED HERE — clean skill fetching
 class SearchResultTutorSerializer(serializers.ModelSerializer):
     skills = serializers.SerializerMethodField()
+    profile_picture_url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -112,6 +114,9 @@ class SearchResultTutorSerializer(serializers.ModelSerializer):
             "skills",
         ]
 
+    def get_profile_picture_url(self, obj):
+        return build_profile_picture_url(obj, self.context.get("request"))
+
     def get_skills(self, obj):
         return SkillSerializer(
             [us.skill for us in obj.userskill_set.all()],
@@ -122,6 +127,7 @@ class SearchResultTutorSerializer(serializers.ModelSerializer):
 class TutorPublicProfileSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True)
     qualifications = QualificationSerializer(many=True)
+    profile_picture_url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -137,3 +143,6 @@ class TutorPublicProfileSerializer(serializers.ModelSerializer):
             "skills",
             "qualifications",
         ]
+
+    def get_profile_picture_url(self, obj):
+        return build_profile_picture_url(obj, self.context.get("request"))

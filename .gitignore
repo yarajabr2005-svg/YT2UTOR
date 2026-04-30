@@ -1,6 +1,10 @@
 backend/venv/
+.venv/
+backend/.venv/
 __pycache__/
 *.pyc
 node_modules/
 .env
 db.sqlite3
+# Dev uploads (regenerated / re-uploaded; seed/ stays in repo for demos)
+backend/media/avatars/

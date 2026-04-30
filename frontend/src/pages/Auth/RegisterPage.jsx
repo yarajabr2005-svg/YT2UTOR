@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MenuItem, Typography } from "@mui/material";
 import AuthLayout from "./AuthLayout";
-import TextInput from "../../components/TextInput";
-import PinkButton from "../../components/PinkButton";
-import ErrorMessage from "../../components/ErrorMessage";
 import { register as apiRegister } from "../../api/auth";
+import { useFeedback } from "../../context/FeedbackContext";
+import {
+  EdField,
+  Eyebrow,
+  StampButton,
+} from "../../components/editorial";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-
+  const { notify } = useFeedback();
   const [form, setForm] = useState({
     email: "",
     username: "",
@@ -18,83 +20,93 @@ export default function RegisterPage() {
     bio: "",
   });
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleChange = (field) => (e) => {
+  const change = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setSubmitting(true);
     try {
       await apiRegister(form);
+      notify.success("Account created. You can sign in now.");
       navigate("/login", { replace: true });
     } catch {
-      // Changed from 'err' to empty to satisfy ESLint
-      setError("Could not register. Check your details and try again.");
+      notify.error("Could not register. Check your details and try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <AuthLayout title="Create your YT²UTOR account">
-      <form onSubmit={handleSubmit}>
-        <TextInput
+    <AuthLayout
+      title="Begin"
+      accent="here"
+      quote="A short form now — booking and sessions live in the app after you sign in."
+    >
+      <Eyebrow>Register</Eyebrow>
+      <h2 className="auth-right-head">Create your workspace</h2>
+      <p className="ux-help" style={{ marginTop: 4, marginBottom: 28 }}>Tutors need a short public bio. Students can add more detail in their profile later.</p>
+
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <EdField
           label="Email"
           type="email"
           required
           value={form.email}
-          onChange={handleChange("email")}
+          onChange={change("email")}
+          autoComplete="email"
         />
-        <TextInput
+        <EdField
           label="Username"
           required
           value={form.username}
-          onChange={handleChange("username")}
+          onChange={change("username")}
+          autoComplete="username"
         />
-        <TextInput
+        <EdField
           label="Password"
           type="password"
           required
           value={form.password}
-          onChange={handleChange("password")}
+          onChange={change("password")}
+          autoComplete="new-password"
         />
-        <TextInput
-          select
+        <EdField
           label="Role"
+          type="select"
           value={form.role}
-          onChange={handleChange("role")}
-        >
-          <MenuItem value="student">Student</MenuItem>
-          <MenuItem value="tutor">Tutor</MenuItem>
-        </TextInput>
-        <TextInput
+          onChange={change("role")}
+          options={[
+            { value: "student", label: "Student — I want to learn" },
+            { value: "tutor", label: "Tutor — I want to teach" },
+          ]}
+        />
+        <EdField
           label="Bio (required for tutors)"
-          multiline
-          minRows={3}
+          type="textarea"
+          rows={3}
           value={form.bio}
-          onChange={handleChange("bio")}
+          onChange={change("bio")}
         />
 
-        <PinkButton type="submit" disabled={submitting}>
-          {submitting ? "Creating account..." : "Sign up"}
-        </PinkButton>
+        <div style={{ marginTop: 16 }}>
+          <StampButton variant="primary" type="submit" disabled={submitting}>
+            {submitting ? "Creating account…" : "Sign up  ›"}
+          </StampButton>
+        </div>
 
-        <ErrorMessage message={error} />
-
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ mt: 3, color: "text.secondary" }}
+        <p
+          style={{
+            marginTop: 32,
+            fontFamily: "var(--sans)",
+            fontSize: 14,
+            color: "var(--mute)",
+          }}
         >
           Already have an account?{" "}
-          <Link to="/login" style={{ color: "#f48fb1", fontWeight: 600 }}>
-            Log in
-          </Link>
-        </Typography>
+          <Link to="/login" className="auth-link">Log in</Link>
+        </p>
       </form>
     </AuthLayout>
   );
