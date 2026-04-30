@@ -209,7 +209,7 @@ class AIService:
 
             # Rating boost
             rating = float(tutor.average_rating or 0)
-            rating_boost = rating / 10.0
+            rating_boost = rating / 30.0
 
             # Urgency boost
             urgency_boost = 0.0

@@ -8,6 +8,7 @@ import {
   fetchBookings,
   fetchTutorAvailability,
   fetchTutorProfile,
+  fetchTutorReviews,
   recommendTutors,
   searchTutors,
 } from "../../api/learning";
@@ -51,6 +52,7 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
   const { notify, confirm } = useFeedback();
 
   const [query, setQuery] = useState("");
+  const [aiQuery, setAiQuery] = useState("");
   const [skillId, setSkillId] = useState("");
   const [day, setDay] = useState("");
   const [time, setTime] = useState("");
@@ -61,6 +63,7 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const bookingRequestLock = useRef(false);
   const [availability, setAvailability] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [pastBookings, setPastBookings] = useState([]);
   const [bookingTab, setBookingTab] = useState("upcoming");
@@ -112,22 +115,19 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
     });
   }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSearch = async (override = query) => {
+  const handleRegularSearch = async (override = query) => {
     setLoading(true);
     try {
       const term = typeof override === "string" ? override : query;
-      const params = { skill: selectedSkill?.name || term, name: selectedSkill ? "" : term };
+      const params = {};
+      if (selectedSkill) {
+        params.skill = selectedSkill.name;
+      } else if (term) {
+        params.name = term;
+      }
       if (day !== "" && time) { params.day = day; params.time = time; }
-      const [searchData, aiData] = await Promise.all([
-        searchTutors(params),
-        recommendTutors({
-          query: selectedSkill?.name || term || "learning support",
-          skill_id: skillId || undefined,
-          day, time,
-        }),
-      ]);
+      const searchData = await searchTutors(params);
       setTutors(asArray(searchData));
-      setRecommendations(asArray(aiData.recommendations));
       setSelectedTutor(null);
       setSelectedSlot(null);
       setAvailability([]);
@@ -138,24 +138,46 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
     }
   };
 
+  const handleAiSearch = async () => {
+    setLoading(true);
+    try {
+      const aiData = await recommendTutors({
+        query: aiQuery || "learning support",
+        skill_id: skillId || undefined,
+        day, time,
+      });
+      setRecommendations(asArray(aiData.recommendations));
+      setSelectedTutor(null);
+      setSelectedSlot(null);
+      setAvailability([]);
+    } catch (err) {
+      notify.error(getErrorMessage(err, "AI recommendations failed."));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const next = new URLSearchParams(location.search).get("q") || "";
     if (!next) return;
     setQuery(next);
-    handleSearch(next);
+    handleRegularSearch(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
   const openTutor = async (tutor) => {
     setSelectedTutor(tutor);
     setSelectedSlot(null);
+    setReviews([]);
     try {
-      const [profile, slots] = await Promise.all([
+      const [profile, slots, revs] = await Promise.all([
         fetchTutorProfile(tutor.id),
         fetchTutorAvailability(tutor.id),
+        fetchTutorReviews(tutor.id),
       ]);
       setSelectedTutor(profile);
       setAvailability(asArray(slots));
+      setReviews(asArray(revs));
     } catch (err) {
       notify.error(getErrorMessage(err, "Could not load tutor profile."));
     }
@@ -306,15 +328,17 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
 
   const findView = (
     <>
-      <SectionMarker index={1} label="Find a tutor" meta={`${matches.length} match${matches.length === 1 ? "" : "es"}`} id="find" />
-      <Eyebrow>Search</Eyebrow>
+      <SectionMarker index={1} label="Find a tutor" meta={`${tutors.length + recommendations.length} match${tutors.length + recommendations.length === 1 ? "" : "es"}`} id="find" />
+
+      {/* ── Regular search ── */}
+      <Eyebrow>Regular search</Eyebrow>
       <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(40px, 5vw, 72px)", margin: "8px 0 24px", lineHeight: 1.02, fontWeight: 400 }}>
-        What do you want to <span className="text-accent-rose" style={{ fontWeight: 600 }}>learn</span>?
+        Search by <span className="text-accent-rose" style={{ fontWeight: 600 }}>skill, name, or time</span>
       </h2>
 
       <EdField
-        label="Topic"
-        placeholder="Calculus, conversational French, React hooks…"
+        label="Topic or tutor name"
+        placeholder="Calculus, Omar, English…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -347,26 +371,66 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
           onChange={(v) => setTime(v)}
         />
         <div style={{ flex: 1 }} />
-        <StampButton variant="primary" onClick={() => handleSearch()} disabled={loading}>
+        <StampButton variant="primary" onClick={() => handleRegularSearch()} disabled={loading}>
           Search &rsaquo;
         </StampButton>
       </div>
       {loading && <LinearProgress sx={{ mt: 1.5 }} />}
 
+      <SectionMarker index={2} label="AI recommendations" meta={`${recommendations.length} suggested`} style={{ marginTop: 56 }} />
+
+      {/* ── AI recommendations ── */}
+      <Eyebrow>AI powered</Eyebrow>
+      <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(40px, 5vw, 72px)", margin: "8px 0 24px", lineHeight: 1.02, fontWeight: 400 }}>
+        Tell us what you want to <span className="text-accent-rose" style={{ fontWeight: 600 }}>learn</span>
+      </h2>
+      <p className="ux-help" style={{ marginBottom: 16 }}>Describe your goal in your own words — the AI will match you with the best tutors based on meaning, ratings, and availability.</p>
+
+      <div style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
+          <EdField
+            label="What do you want to learn?"
+            placeholder="I need help with calculus before my exam next week…"
+            value={aiQuery}
+            onChange={(e) => setAiQuery(e.target.value)}
+          />
+        </div>
+        <StampButton variant="accent" onClick={() => handleAiSearch()} disabled={loading}>
+          Find with AI &rsaquo;
+        </StampButton>
+      </div>
+      <p className="ux-help" style={{ marginTop: 6 }}>
+        Tip: mention urgency like &ldquo;exam&rdquo;, &ldquo;tomorrow&rdquo;, or &ldquo;urgent&rdquo; to boost tutors who are available soon.
+      </p>
+      {loading && <LinearProgress sx={{ mt: 1.5 }} />}
+
       <div className="split-3" style={{ marginTop: 48 }}>
         <div>
-          <Eyebrow>AI suggestions</Eyebrow>
-          <h3 style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 500, margin: "8px 0 12px" }}>
-            Top <span className="text-accent-rose" style={{ fontWeight: 600 }}>matches</span>
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: 24, fontWeight: 500, margin: "0 0 12px" }}>
+            {tutors.length} tutor{tutors.length === 1 ? "" : "s"} found
           </h3>
-          {matches.length === 0 ? (
+          {tutors.length === 0 ? (
             <EmptyState
-              title="Search to see tutor matches."
-              meta="Try a skill — Math, Physics, Python — or any subject in the catalog."
+              title="No tutors match your search."
+              meta="Try a different skill, name, or adjust the time filters."
             />
           ) : (
-            matches.map((tutor) => (
+            tutors.map((tutor) => (
               <TutorCard key={tutor.id} tutor={tutor} onView={openTutor} />
+            ))
+          )}
+
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: 24, fontWeight: 500, margin: "48px 0 12px" }}>
+            Top <span className="text-accent-rose" style={{ fontWeight: 600 }}>matches</span>
+          </h3>
+          {recommendations.length === 0 ? (
+            <EmptyState
+              title="AI suggestions appear here."
+              meta="Be specific — try mentioning a subject, a goal, or a deadline."
+            />
+          ) : (
+            recommendations.map((tutor) => (
+              <TutorCard key={`ai-${tutor.id}`} tutor={tutor} onView={openTutor} />
             ))
           )}
         </div>
@@ -445,6 +509,38 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
               >
                 {bookingSubmitting ? "Sending request…" : "Request booking ›"}
               </StampButton>
+
+              {reviews.length > 0 && (
+                <>
+                  <hr className="divider-rule" style={{ marginTop: 24 }} />
+                  <Eyebrow>Recent reviews</Eyebrow>
+                  <div style={{ marginTop: 12 }}>
+                    {reviews.slice(0, 5).map((r) => (
+                      <div key={r.id} style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--rule)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                          <span style={{ fontFamily: "var(--sans)", fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>
+                            {r.student_username || "Student"}
+                          </span>
+                          <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--rose)" }}>
+                            {"★".repeat(Math.round(r.rating))}
+                            {"☆".repeat(5 - Math.round(r.rating))}
+                          </span>
+                        </div>
+                        {r.comment && (
+                          <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 14, color: "var(--mute)", margin: 0 }}>
+                            &ldquo;{r.comment}&rdquo;
+                          </p>
+                        )}
+                        {r.created_at && (
+                          <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: "var(--mute)", margin: "2px 0 0" }}>
+                            {new Date(r.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

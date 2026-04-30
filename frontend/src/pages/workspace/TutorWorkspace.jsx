@@ -11,6 +11,7 @@ import {
   fetchTutorAvailability,
   fetchTutorProfile,
   rejectBooking,
+  updateAvailability,
   updateTutorSkills,
   uploadQualification,
 } from "../../api/learning";
@@ -56,6 +57,7 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
     end_time: "10:00",
   });
   const [qualification, setQualification] = useState({ skill_id: "", file: null });
+  const [editingSlotId, setEditingSlotId] = useState(null);
   const [profileForm, setProfileForm] = useState({
     username: user?.username || "",
     bio: user?.bio || "",
@@ -152,19 +154,45 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
 
   const saveAvailability = async () => {
     try {
-      await createAvailability({
-        week_start_date: slot.week_start_date,
-        slots: [{
+      if (editingSlotId) {
+        await updateAvailability(editingSlotId, {
           day_of_week: Number(slot.day_of_week),
           start_time: slot.start_time,
           end_time: slot.end_time,
-        }],
-      });
-      notify.success("Availability saved.");
+        });
+        notify.success("Slot updated.");
+      } else {
+        await createAvailability({
+          week_start_date: slot.week_start_date,
+          slots: [{
+            day_of_week: Number(slot.day_of_week),
+            start_time: slot.start_time,
+            end_time: slot.end_time,
+          }],
+        });
+        notify.success("Availability saved.");
+      }
+      setEditingSlotId(null);
+      setSlot({ week_start_date: defaultWeekStart, day_of_week: 0, start_time: "09:00", end_time: "10:00" });
       await refresh();
     } catch (err) {
       notify.error(getErrorMessage(err, "Could not save availability."));
     }
+  };
+
+  const editSlot = (item) => {
+    setEditingSlotId(item.id);
+    setSlot({
+      week_start_date: item.week_start_date || defaultWeekStart,
+      day_of_week: item.day_of_week,
+      start_time: item.start_time,
+      end_time: item.end_time,
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingSlotId(null);
+    setSlot({ week_start_date: defaultWeekStart, day_of_week: 0, start_time: "09:00", end_time: "10:00" });
   };
 
   const submitQualification = async () => {
@@ -409,8 +437,13 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
             <EdField label="End" type="time" value={slot.end_time}
               onChange={(e) => setSlot((s) => ({ ...s, end_time: e.target.value }))} />
           </div>
-          <div style={{ marginTop: 16 }}>
-            <StampButton variant="primary" onClick={saveAvailability}>Add slot</StampButton>
+          <div style={{ marginTop: 16, display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <StampButton variant="primary" onClick={saveAvailability}>
+              {editingSlotId ? "Update slot" : "Add slot"}
+            </StampButton>
+            {editingSlotId && (
+              <StampButton variant="ghost" onClick={cancelEdit}>Cancel</StampButton>
+            )}
           </div>
         </div>
         <div>
@@ -424,6 +457,9 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
                   <div className="erow-meta">{formatTime(item.start_time)} – {formatTime(item.end_time)}</div>
                 </div>
                 <span style={{ width: 1 }} />
+                <StampButton variant="ghost" onClick={() => editSlot(item)}>
+                  Edit
+                </StampButton>
                 <StampButton variant="quiet" onClick={() => void removeAvailability(item.id)}>
                   Remove
                 </StampButton>
