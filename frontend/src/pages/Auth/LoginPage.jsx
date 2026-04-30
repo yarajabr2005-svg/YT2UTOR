@@ -59,6 +59,17 @@ export default function LoginPage() {
           autoComplete="current-password"
         />
 
+        <p
+          style={{
+            marginBottom: 0,
+            fontFamily: "var(--sans)",
+            fontSize: 13,
+            textAlign: "right",
+          }}
+        >
+          <Link to="/forgot-password" className="auth-link">Forgot your password?</Link>
+        </p>
+
         <div style={{ marginTop: 16 }}>
           <StampButton variant="primary" type="submit" disabled={submitting}>
             {submitting ? "Logging in…" : "Log in  ›"}

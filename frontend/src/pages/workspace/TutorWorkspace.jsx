@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Chip, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from "@mui/material";
 import {
+  cancelBooking,
   completeBooking,
   confirmBooking,
   createAvailability,
@@ -253,6 +254,24 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
       notify.error(getErrorMessage(err, "Could not mark session complete."));
     } finally {
       setSessionActionId(null);
+    }
+  };
+
+  const onCancelSession = async (bookingId) => {
+    const ok = await confirm({
+      title: "Cancel this confirmed session?",
+      description: "The student will be notified. You can only cancel up to 24 hours before the session starts.",
+      confirmLabel: "Yes, cancel session",
+      cancelLabel: "Keep it",
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await cancelBooking(bookingId);
+      notify.success("Session cancelled.");
+      await refresh();
+    } catch (err) {
+      notify.error(getErrorMessage(err, "Could not cancel session."));
     }
   };
 
@@ -530,6 +549,7 @@ export default function TutorWorkspace({ skills, activeSection = "dashboard", on
                     markBusy={sessionActionId === b.id}
                     canComplete={b.status === "confirmed" && isPastSessionEnd(b)}
                     onMarkComplete={() => void onMarkSessionComplete(b)}
+                    onCancel={() => void onCancelSession(b.id)}
                   />
                 </li>
               ))}
@@ -680,6 +700,7 @@ function TutorSessionRow({
   onMarkComplete,
   canComplete = false,
   markBusy = false,
+  onCancel,
 }) {
   const d = booking.booking_date
     ? new Date(`${booking.booking_date}T12:00:00`)
@@ -739,6 +760,15 @@ function TutorSessionRow({
       </div>
       <InkPill status={booking.status} />
       <div className="row-flex session-row__cta">
+        {booking.status === "confirmed" && onCancel && (
+          <StampButton
+            type="button"
+            variant="quiet"
+            onClick={onCancel}
+          >
+            Cancel
+          </StampButton>
+        )}
         {showMarkComplete && booking.status === "confirmed" && (
           <StampButton
             type="button"

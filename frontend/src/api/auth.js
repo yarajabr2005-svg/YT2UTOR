@@ -49,3 +49,17 @@ export async function changePassword({ old_password, new_password }) {
   const response = await api.put("users/me/password/", { old_password, new_password });
   return response.data;
 }
+
+export async function requestPasswordReset(email) {
+  const response = await api.post("auth/password-reset/", { email });
+  return response.data;
+}
+
+export async function confirmPasswordReset(uid, token, new_password) {
+  const response = await api.post("auth/password-reset/confirm/", {
+    uid,
+    token,
+    new_password,
+  });
+  return response.data;
+}

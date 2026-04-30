@@ -131,9 +131,13 @@ SIMPLE_JWT = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 # 11. EMAIL & NOTIFICATION SETTINGS
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_PAGE_LINE_WIDTH = 999
-DEFAULT_FROM_EMAIL = "no-reply@yt2utor.com"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "no-reply@yt2utor.com")
 FRONTEND_BASE_URL = "http://localhost:5173"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
