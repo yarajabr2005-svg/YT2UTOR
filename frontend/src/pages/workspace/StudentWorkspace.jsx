@@ -228,6 +228,9 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
       });
       notify.success("Review submitted.");
       setReview({ booking_id: "", rating: 5, comment: "" });
+      const reviewBookingId = review.booking_id;
+      setPastBookings((prev) => prev.filter((b) => b.id !== reviewBookingId));
+      setBookings((prev) => prev.filter((b) => b.id !== reviewBookingId));
     } catch (err) {
       notify.error(getErrorMessage(err, "Could not submit review."));
     }
@@ -589,28 +592,6 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
         ))
       )}
 
-      {review.booking_id && (
-        <div style={{ marginTop: 32 }}>
-          <SectionMarker index={2} label="Leave a review" />
-          <EdField
-            label="Rating (1–5)"
-            type="number"
-            min={1}
-            max={5}
-            value={review.rating}
-            onChange={(e) => setReview((r) => ({ ...r, rating: e.target.value }))}
-          />
-          <EdField
-            label="Comment"
-            type="textarea"
-            value={review.comment}
-            onChange={(e) => setReview((r) => ({ ...r, comment: e.target.value }))}
-          />
-          <div style={{ marginTop: 16 }}>
-            <StampButton variant="primary" onClick={submitReview}>Submit</StampButton>
-          </div>
-        </div>
-      )}
     </>
   );
 
@@ -715,6 +696,29 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
     </>
   );
 
+  const reviewForm = review.booking_id && (
+    <div style={{ marginTop: 32 }}>
+      <SectionMarker index={2} label="Leave a review" />
+      <EdField
+        label="Rating (1–5)"
+        type="number"
+        min={1}
+        max={5}
+        value={review.rating}
+        onChange={(e) => setReview((r) => ({ ...r, rating: e.target.value }))}
+      />
+      <EdField
+        label="Comment"
+        type="textarea"
+        value={review.comment}
+        onChange={(e) => setReview((r) => ({ ...r, comment: e.target.value }))}
+      />
+      <div style={{ marginTop: 16 }}>
+        <StampButton variant="primary" onClick={submitReview}>Submit</StampButton>
+      </div>
+    </div>
+  );
+
   const views = {
     dashboard: dashboardView,
     find: findView,
@@ -728,6 +732,7 @@ export default function StudentWorkspace({ skills, activeSection = "dashboard", 
   return (
     <>
       {views[activeSection] || dashboardView}
+      {reviewForm}
     </>
   );
 }
